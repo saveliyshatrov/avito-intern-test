@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import * as htmlToImage from 'html-to-image';
-import fileDownload from "js-file-download";
-import * as domtoimage from 'html-to-image';
+import * as htmltoimage from 'html-to-image';
 
 import {
     Button,
@@ -18,7 +16,6 @@ import {
     Preview, SelectType,
     Settings
 } from "./components";
-import html2canvas from "html2canvas";
 
 let SJson = {
     url: 'https://www.avito.st/',
@@ -45,11 +42,12 @@ function App() {
         return fill?[color]:[deg,fColor,sColor]
     }
     function getImage(){
-        return image.length !== 0?{backgroundImage:`url(${image})`}:''
+        return 'url('+image+')'
     }
     function getBackground(){
+        console.log(image.length)
         return {
-        backgroundImage: `${getColor()}`,
+        background: `${image.length === 0?getColor():getImage()}`,
         backgroundPosition: `100% 100%, 0% 0%`,
         backgroundRepeat: `no-repeat, repeat`,
         backgroundAttachment: `scroll, scroll`,
@@ -58,7 +56,7 @@ function App() {
         backgroundClip: `border-box, border-box;`}
     }
     function downloadPNG(){
-        domtoimage.toPng(document.getElementById('card')!).then((imageData: string) => {
+        htmltoimage.toPng(document.getElementById('card')!).then((imageData: string) => {
             console.log(imageData)
             download('card.png', imageData)
             }
@@ -66,6 +64,7 @@ function App() {
     }
 
     function download(filename:string, URI:string) {
+        console.log(URI)
         let element = document.createElement('a');
         element.setAttribute('href', URI);
         element.setAttribute('download', filename);
@@ -100,13 +99,13 @@ function App() {
         document.body.removeChild(textArea);
     }
     function copyMarkUp(){
-        let markup = `<Card id={'card'} href={${url}} style=${JSON.stringify(getBackground()) + ',' + JSON.stringify(getImage())}}><CardText>${text}</CardText></Card>`
+        let markup = `<Card id={'card'} href={${url}} style=${JSON.stringify(getBackground())}}><CardText>${text}</CardText></Card>`
         copyToClipBoard(markup)
     }
     return (
         <IDE>
             <Preview>
-                <Card id={'card'} style={{...getBackground(), ...getImage()}}>
+                <Card id={'card'} style={{...getBackground()}}>
                     <CardText>{text}</CardText>
                 </Card>
             </Preview>
