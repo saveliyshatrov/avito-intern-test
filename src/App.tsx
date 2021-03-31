@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.css';
 import * as htmlToImage from 'html-to-image';
 import fileDownload from "js-file-download";
+import domtoimage from 'dom-to-image';
+
 import {
     Button,
     ButtonSelect,
@@ -16,6 +18,7 @@ import {
     Preview, SelectType,
     Settings
 } from "./components";
+import html2canvas from "html2canvas";
 
 let SJson = {
     url: 'https://www.avito.st/',
@@ -55,11 +58,23 @@ function App() {
         backgroundClip: `border-box, border-box;`}
     }
     function downloadPNG(){
-        htmlToImage.toPng(document.getElementById('card')!)
-            .then(function (dataUrl) {
-                fileDownload(dataUrl, 'card.png');
-            });
+        domtoimage.toPng(document.getElementById('card')!).then((imageData: string) => {
+            download('card.png', imageData)
+            }
+        )
     }
+
+    function download(filename:string, URI:string) {
+        console.log(URI)
+        let element = document.createElement('a');
+        element.setAttribute('href', URI);
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
     function copyJSONToClipBoard(){
         let obj = {
             url: url,
