@@ -65,7 +65,6 @@ function App() {
     }
 
     function download(filename:string, URI:string) {
-        console.log(URI)
         let element = document.createElement('a');
         element.setAttribute('href', URI);
         element.setAttribute('download', filename);
