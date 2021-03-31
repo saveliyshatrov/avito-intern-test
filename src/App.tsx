@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import * as htmlToImage from 'html-to-image';
 import fileDownload from "js-file-download";
-import domtoimage from 'dom-to-image';
+import * as domtoimage from 'html-to-image';
 
 import {
     Button,
@@ -59,6 +59,7 @@ function App() {
     }
     function downloadPNG(){
         domtoimage.toPng(document.getElementById('card')!).then((imageData: string) => {
+            console.log(imageData)
             download('card.png', imageData)
             }
         )
@@ -99,7 +100,7 @@ function App() {
         document.body.removeChild(textArea);
     }
     function copyMarkUp(){
-        let markup = `<Card id='card' href=${url} style=${JSON.stringify(getBackground()) + ',' + JSON.stringify(getImage())}}><CardText>${text}</CardText></Card>`
+        let markup = `<Card id={'card'} href={${url}} style=${JSON.stringify(getBackground()) + ',' + JSON.stringify(getImage())}}><CardText>${text}</CardText></Card>`
         copyToClipBoard(markup)
     }
     return (
